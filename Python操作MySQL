@@ -49,8 +49,7 @@ def create(cur,conn):
 	print('------>'+'\n'+'已增加商品：')	
 	for i in data:
 		print(i)
-	print('\n'+'\n'+'*****返回主页面*****'+'\n'+'\n')
-	main()
+	return_to()
 	
 
 def delete_db(cur,conn):
@@ -87,14 +86,13 @@ def delete_db(cur,conn):
 		conn.commit()
 		print('------>'+'\n'+'是否要查询所有数据Y/N：')
 	else:
-		print('------>'+'\n'+'你大爷的，认真一点')
-	print('\n'+'\n'+'*****返回主页面*****'+'\n'+'\n')
-	main()
+		print('------>'+'\n'+'虽然我只是一个数据库也是有底线的好啵！！！')
+	return_to()
+
 
 def update():
 	print('你等等就能这么做了')
-	print('\n'+'\n'+'*****返回主页面*****'+'\n'+'\n')
-	main()
+	return_to()
 
 
 #查询  遇到问题：怎么判断一个空元组  解决：其对应的布尔值为空
@@ -126,7 +124,6 @@ def select(cur,conn):
 		else:
 			print('***您要查询的ID不存在***')
 
-		
 	elif select_num == selects[2]:
 		sel_num = input('输入你要查询的名称'+'\n'+'------>：')
 		cur.execute("SELECT * FROM shop WHERE name='{}';".format(sel_num))
@@ -136,8 +133,7 @@ def select(cur,conn):
 				print(i)
 		else:
 			print('***您要查询的名称不存在***')	
-			
-			
+				
 	elif select_num == selects[3]:
 		sel_num = input('输入你要查询的生产日期'+'\n'+'------>：')
 		cur.execute("SELECT * FROM shop WHERE man_date='{}';".format(sel_num))
@@ -148,7 +144,6 @@ def select(cur,conn):
 		else:	
 			print('***您要查询的生产日期不存在***')
 
-
 	elif select_num == selects[4]:
 		sel_num = input('输入你要查询的库存'+'\n'+'------>：')
 		cur.execute("SELECT * FROM shop WHERE stock={};".format(sel_num))
@@ -158,7 +153,6 @@ def select(cur,conn):
 				print(i)
 		else:
 			print('***您要查询的库存不存在***')	
-
 
 	elif select_num == selects[5]:
 		sel_num = input('输入你要查询的价格'+'\n'+'------>：')
@@ -171,12 +165,21 @@ def select(cur,conn):
 			print('***您要查询的价格不存在***')
 
 	else:
-		print('------>'+'\n'+'你大爷的，认真一点')
-	
-	print('\n'+'\n'+'*****返回主页面*****'+'\n'+'\n')
-	main()
+		print('------>'+'\n'+'虽然我只是一个数据库也是有底线的好啵！！！')
+	return_to()
 	
 
+def return_to():
+	select_s = input('返回主菜单/退出-------R/Q---r/q')
+	select_list = ['r','R']
+	if select_s == select_list[0]:
+		print('\n'+'\n'+'*****返回主页面*****'+'\n'+'\n')
+		main()
+	elif select_s == select_list[1]:
+		print('\n'+'\n'+'*****返回主页面*****'+'\n'+'\n')
+		main()
+	else:
+		print('\n'+'\n'+'*****山水有相逢，告辞*****'+'\n'+'\n')
 
 
 #超过约束时候不会报错   eg.：int(5)   没有退出和返回
@@ -193,6 +196,7 @@ def main():
 	elif select_num == selects[3]:
 		delete_db(cur,conn)
 	else:
-		print('------>你大爷的，认真一点')
+		print('------>虽然我只是一个数据库也是有底线的好啵！！！')
+		return_to()
 
 main()
