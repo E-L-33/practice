@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Index</title>
+
+    <!-- Bootstrap -->
+    <link href="static/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/bootstrap-3.3.7-dist/css/index.css" rel="stylesheet">
+    <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+    <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+    <!--[if lt IE 9]>
+    <script src="static/bootstrap-3.3.7-dist/js/html5shiv.min.js"></script>
+    <script src="static/bootstrap-3.3.7-dist/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!--<div class="modal-body">-->
+            <!--...-->
+            <!--</div>-->
+
+            <!-- 图表容器 DOM -->
+            <div id="container" style="width: 600px;height:400px;"></div>
+            <!-- 引入 highcharts.js -->
+            <script src="static/highcharts-6.1.4.js"></script>
+            <script>
+                // 图表配置
+                var options = {
+                    chart: {
+                        type: 'line'                          //指定图表的类型，默认是折线图（line）
+                    },
+                    title: {
+                        text: null                 // 标题
+                    },
+                    xAxis: {
+                        categories: ['总浏览量', '七日浏览量', '今日浏览量'], // x 轴分类
+                        tickmarkPlacement: 'on'
+                    },
+                    yAxis: {
+                        title: {
+                            text: null                // y 轴标题
+                        },
+                        labels: {
+                            enabled: false
+                        },
+                        gridLineDashStyle: 'Dash'
+                    },
+                    series: [{                              // 数据列
+                        name: '网站阅读记录',                       // 数据列名
+                        data: [1000, 243, 34]                     // 数据
+                    },],
+                    plotOptions: {                  //  不知道什么用
+                        line: {
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    lengend: {                 //  不知道什么用
+                        enabled: false
+                    },
+                    credits: {                       // 消除右下角水印
+                        enabled: false
+                    },
+                };
+                // 图表初始化函数
+                var chart = Highcharts.chart('container', options);
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cloudmessage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                这里本来应该做有格式的弹出框，看了一下需要js扩展，暂时先用模态框代替
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="hidden-xs col-sm-12 block"></div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-7 col-sm-offset-1">
+            <div class="title-image">
+                <div class="title-font">
+                    <p>做什么都很苦，但坚持就很酷</p>
+                </div>
+                <div class="title-detail">
+                    <div class="title-user">
+                        <img src="static/images/avatar.jpg" class="img-circle">
+                        <strong>EVIC/liuya</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hidden-xs col-sm-4">
+            <div class="title-right">
+                <a href="#">
+                    <div class="right-img">
+                        <img src="static/images/favicon.png">
+                    </div>
+                </a>
+                <div class="right-detail">
+                    <div class="tag-type">
+                        <strong>liuya'blog</strong>
+                        <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <a data-toggle="modal" data-target="#myModal">
+                            <span class="glyphicon glyphicon-option-vertical pull-right"
+                                  data-toggle="tooltip"
+                                  data-placement="top" title="网站阅读记录">
+                            </span>
+                        </a>
+                        <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <a data-toggle="modal" data-target="#cloudmessage">
+                            <span class="glyphicon glyphicon-equalizer pull-right" data-toggle="tooltip"
+                                  data-placement="top" title="云标签"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="static/bootstrap-3.3.7-dist/js/jquery-3.3.1.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip(),
+            $('[data-toggle="popover"]').popover()
+    })
+</script>
+</body>
+</html>

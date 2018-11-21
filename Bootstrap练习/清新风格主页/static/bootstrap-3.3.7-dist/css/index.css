@@ -1,0 +1,89 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background: url("../../images/bg.jpg") no-repeat center fixed;
+    background-size: cover;
+}
+.block{
+    margin-top: 14rem;
+}
+.title-image{
+    /*height: 27rem;*/
+    background: url("../../images/daily.jpg") no-repeat;
+    background-size: 100%;
+    -webkit-box-shadow:0 0 10px #000000;
+    -moz-box-shadow:0 0 10px #000000;
+    box-shadow:0 0 10px #000000;
+}
+/*.title-detail{*/
+    /*width: 92%;*/
+    /*height: 6rem;*/
+    /*background: #ffffff;*/
+/*}*/
+.title-font p{
+    /*text-align:center;*/
+    font-size: 24px;
+    line-height: 26px;
+    font-weight: 400;
+    margin: 0;
+    padding-top: 48%;
+    padding-left: 5%;
+    padding-bottom: 1%;
+    color: #ffffff;
+    text-shadow: 1px 1px 8px #444;
+}
+.title-detail{
+    height: 5rem;
+    background: #ffffff;
+}
+.title-user{
+    padding-top: 2.5%;
+    margin-left: 5%;
+}
+.title-user img{
+    margin-right: 2%;
+    /*weight:3rem;*/
+    height: 2.8rem;
+    /*background: #ffffff;*/
+}
+.title-right{
+    -moz-box-shadow: 1px 2px 2px #333232;
+    -webkit-box-shadow: 1px 2px 2px #333232;
+    box-shadow: 1px 2px 2px #333232;
+    /*box-shadow:阴影水平偏移值（可取正负值）； 阴影垂直偏移值（可取正负值）；阴影模糊值；阴影颜色；*/
+}
+.right-img{
+    height: 29rem;
+    /*height: 50%;*/
+    background: rgba(255,255,255,1);
+    display: flex;
+    justify-content:center;
+}
+.right-img img{
+    width: 40%;
+    align-self: center;
+    /*margin: 20% auto 0 23%;*/
+}
+.right-detail{
+    height: 4.8rem;
+    background: #eee;
+}
+.right-detail strong{
+
+}
+.tag-type{
+    padding-top: 5%;
+    margin-left: 5%;
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 400;
+
+    padding-left: 5%;
+    padding-bottom: 1%;
+    color: #4b4b4b;
+}
+.tag-type a:hover{
+    color: #d06f15;
+}
