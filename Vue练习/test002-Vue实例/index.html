@@ -1,0 +1,16 @@
+<script src="../vue-2.4.3.js"></script>
+
+<div id="foo1">
+    <p>{{message}}</p>
+    <button v-on:click="message='改变？'">幻化</button>
+</div>
+
+<hr>
+
+<div id="foo2">
+    <p>{{message}}</p>
+    <!-- 这里说明v-on:click可以接收一个表达式？？？？ -->
+    <button v-on:click="message='change？？？'">幻化</button>
+</div>
+
+<script src="index.js"></script>

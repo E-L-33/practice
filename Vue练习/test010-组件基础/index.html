@@ -1,0 +1,249 @@
+<script src="../vue-2.4.3.js"></script>
+
+<h2>组件基础</h2>
+<div id="app-1">
+    <h3>基本示例</h3>
+    <p>
+        组件是可复用的Vue实例，所以它们与new Vue接受相同的选项，例如data、
+        computed、watch、methods以及生命周期钩子（啥玩意？？？）等，
+        仅有的例外是像el这样的根实例特有的选项（这。。确定不是个矛盾的话）
+    </p>
+    <mytest></mytest>
+    <mytest></mytest>
+    <mytest></mytest>
+    <h3>组件的复用</h3>
+    <p>
+        每次你点击按钮时候，每个组件都会有一个新的实例
+        被创建，所以他们的count都是独立的
+    </p>
+    <p>
+        这一部分源于在我们定义一个组件时，data选
+        项是一个函数，这样我们在每个实例都可以维护一份被返回对象的独立拷贝
+        ，如果不这样的话，那组件会变成这样：
+    </p>
+    <!-- <testerr></testerr> -->
+    <p>
+        emmmmmm,为什么不能在一个div里面创建两个组件，老是提示：<br>
+        did you register the component correctly? For recursive components,
+        make sure to provide the "name" option. <br>
+        当名字为testErr或者testerr的时候会这样
+    </p>
+    <p>它这个三个联动的我好想做出来，提示必须为函数</p>
+</div>
+
+<script>
+    Vue.component("mytest",{
+        data: function(){
+            return{
+                count:0
+            }
+        },
+        template: '<button v-on:click="count++">you click {{ count }} times.</button>'
+    });
+    // Vue.component('testerr', {
+    //     template: '<button v-on:click="counts++">you click {{ counts }} times.</button>'
+    // });
+    new Vue({el: "#app-1",data: {counts:0}});
+</script>
+
+<div id="app-2">
+    <h3>组件的组织</h3>
+    <p>
+        为了能在模板中使用，组件必须先注册以便vue能够识别。组件的注册类型有两种：
+        <strong>全局注册</strong>和<strong>局部注册</strong>
+    </p>
+    <p>
+        在前面我们使用的例子中都是通过Vue.component全局注册的，
+        全局注册的组件可以用在其注册之后的任何（通过new Vue）新创键的Vue根实例（啥？？？），
+        也包括其组件树中所有子组件的模板中。
+        <strong>这就是为什么要先注册再绑定的原因？？原来不是绑定</strong>
+    </p>
+    <h3>通过prop向子组件传递数据（prop：n.道具，支持者，后盾，支柱）</h3>
+    <blog-post title="-------基础示例"></blog-post>
+    <blog-post title="1、传递一个标题给组件"></blog-post>
+    <blog-post title="2、传递个sha呢"></blog-post>
+    <p>
+        prop是你可以在组件上注册的一些自定义特性。当一个值传递给一个prop特性
+        的时候，它就变成了那个组件实例的也各属性，我们可以用一个props选项将要
+        传递的内容包含在该组件可接受的prop列表中。
+        一个组件默认可以拥有任意数量的prop，我们在组件实例中去访问这些值时，
+        就像访问data中的值一样，
+    </p>
+    <p>
+        当然，这只是最基础的用法，在一个典型的应用中，会使用v-bind来动态
+        的传递prop，这在你一开始不清楚渲染的具体内容是什么的时候会很有用。
+    </p>
+    <p>
+        简单来讲，按我的理解，就是将组件、html、Vue实例分开，
+        组件用来接受数据和设置模板，html用来展示和传递既定的数据，
+        Vue实例（这里尤其指实例里的data）用来传递大量的或者未知的（如通过API获得的内容）数据，
+        那组件里面的data呢
+    </p>
+    <h4>示例：</h4>
+    <blog-post
+        v-for="post in posts"
+        v-bind:key="post.id"
+        v-bind:title="post.title"
+    ></blog-post>
+    <p>当然，为了不使prop定义的变得这么麻烦，可以让prop单独接受一个post</p>
+    <blog-post2 v-for="post in posts" v-bind:post="post"></blog-post2>
+</div>
+<script>
+    Vue.component('blog-post',{
+        props:['title','key'],
+        template: '<h4>{{ title }}</h4>'
+    });
+    Vue.component('blog-post2',{
+        props:["post"],
+        template: '<h4>{{ post.id }}、{{ post.title }}</h4>'
+    });
+    new Vue({
+        el:"#app-2",
+        data:{
+            posts: [
+            {id:1, title:"111111"},
+            {id:2, title:"22222222"},
+            {id:3, title:"3333333"}
+            ]
+        }
+    });
+</script>
+
+<div id="app-3">
+    <h3>通过事件向父级组件发送消息</h3>
+    <p>这里是讲说无法在组件模板中使用除了v-html的指令吗</p>
+    <div :style="{ fontSize: fontsizes + 'em' }">
+        <laeger-button
+          v-for="post in posts"
+          v-bind:key="post.id"
+          v-bind:post="post"
+        ></laeger-button>
+    </div>
+    然后Vue实例提供了一个自定义事件的系统来解决这个问题,
+    可以调用内建的$emit方法并传入事件的名字,来向父级(就是那个模板标签????)
+    触发一个事件
+    不过他这个例子里面button出了渲染以外还有其他的用处吗???
+    改例子:
+
+</div>
+
+<script>
+    Vue.component('laeger-button',{
+        props: ['post'],
+        template: `
+            <div class="blog-post">
+              <h3>{{ post.title }}</h3>
+              <button @click="fontsizes+=1">
+                Enlarge text
+              </button>
+              <div v-html="post.content"></div>
+            </div>
+          `
+    });
+    Vue.component('laeger-button2',{
+        props: ['post'],
+        template: `
+            <div class="blog-post">
+              <h3>{{ post.title }}</h3>
+              <button @click="$emit('fontsizess')">
+                Enlarge text
+              </button>
+              <div v-html="post.content"></div>
+            </div>
+          `
+    });
+    var app3 = new Vue({
+        el: "#app-3",
+        data: {
+            posts:[
+            {id:1,title:"123456",content:"<p>kahdgajhdajdhgajdhgakjh</p>"}
+        ],
+            fontsizes:1
+        }
+    })
+</script>
+<div id="app--4"  :style="{ fontSize: fontsizes + 'em' }">
+    <larger-button2
+        v-for="post in posts"
+        v-bind:key=post.id+1
+        v-bind:post="post"
+        v-on:fontsizess="fontsizes+=0.1"
+    ></larger-button2>
+    <larger-button2
+        v-for="post in posts"
+        v-bind:key=post.id+1
+        v-bind:post="post"
+        v-on:fontsizess="fontsizes+=0.1"
+    ></larger-button2>
+    <larger-button2
+        v-for="post in posts"
+        v-bind:key=post.id+1
+        v-bind:post="post"
+        v-on:fontsizess="fontsizes+=0.1"
+    ></larger-button2>
+</div>
+<script>
+    Vue.component('larger-button2',{
+        props: ['post'],
+        template: `
+            <div class="blog-post">
+              <h3>{{ post.title }}</h3>
+              <button v-on:click="$emit('fontsizess')">
+                Enlarge text
+              </button>
+              <div v-html="post.content"></div>
+            </div>
+          `
+    });
+    var app4 = new Vue({
+        el: "#app--4",
+        data: {
+            posts:[
+            {id:1,title:"123456",content:"<p>kahdgajhdajdhgajdhgakjh</p>"}
+        ],
+            fontsizes:1
+        }
+    })
+</script>
+
+<div id="app-4">
+    <h3>使用事件抛出一个值</h3>
+    <p>还是上面的例子,有的时候需要组件模板内抛出一个值,
+        比如改变文本大小的时候,改变的大小由组件模板的第二个参数来决定</p>
+    <p>&lt;button v-on:click="$emit('fontsizes',0.1)"&gt;larger&lt;/button&gt;</p>
+    <p>
+        当父级事件监听这个事件的时候,我们可以通过$event访问到被抛出的这个值
+    </p>
+    <p>
+        &lt;larger-button <br>
+            ... <br>
+            v-on:fontsizes="fontsize+=$event" <br>
+        &gt;&lt;/larger-button&gt;
+    </p>
+    <p>当v-on后接的事件处理函数是个方法的话,$emit抛出的值将作为这个方法的第一个参数</p>
+    <h3>在组件上使用v-model</h3>
+    <p>自定义事件也可以用于创建支持v-model的自定义输入组件</p>
+    <p>
+        第一个点是文档要求记住的对象: <br>
+        &lt;input v-model="searchText"&gt; <br>
+        等价于: <br>
+        &lt;input <br>
+            v-bind:value="searchText" <br>
+            v-on:input="searchText = $event.target.value" <br>
+        &gt;
+    </p>
+    <p>
+        好的,还是看不懂,之前在哪里遇到过$event来着----
+        事件处理那一章,,,使用$event在内联语句处理器中访问原始的 DOM 事件
+    </p>
+    <p>好的,不懂</p>
+    <h3>通过插槽分发内容</h3>
+    <p>
+        &lt;slot&gt;元素就是来解决这个问题--这个就是所谓的插槽??? <br>
+        简单来讲,想要模板定义的语义标签中间包含的内容插入到模板指定位置渲染,
+        只需要在模板定义时候,使用slot就好了,slot是一个双标签.
+    </p>
+    <h3>动态组件</h3>
+    <p>component元素的is特性</p>
+    <h3>解析DOM模板时的注意事项</h3>
+</div>

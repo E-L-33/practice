@@ -1,0 +1,54 @@
+1.	查询平均成绩大于60分的同学的id和平均成绩；
+    Student.objects.annotate(an=Avg('score__number')).filter(an__gt=60).values('id','name','an')
+2.	查询所有同学的id、姓名、选课的数量、总成绩；
+	Student.objects.annotate(ct=Count("score__id"),cg=Sum("score__number")).values("id","name","ct","cg")
+3.	查询姓“李”的老师的个数；
+    Teacher.objects.filter(name__startswith="李").count()
+4.	查询没学过“李老师”课的同学的id、姓名；
+	Student.objects.exclude(score__course__teacher__name__startswith="李").values("id","name")
+
+5.	查询学过课程id为1和2的所有同学的id、姓名；
+    Student.objects.filter(score__course__id=1).filter(score__course__id=2)
+	Student.objects.filter(score__course__id__in=[1,2]).values("id","name")    这个不对,这个查出来是或的结果
+*6.	查询学过“黄老师”所教的“所有课”的同学的id、姓名；
+    黄老师教的课程数量
+    Course.objects.filter(teacher__name__startswith="黄").count()
+    同学学过黄老师课的课数
+    Student.objects.filter(score__course__teacher__name__startswith="黄").annotate(ac=Count("score__number")).filter(ac=Course.objects.filter(teacher__name__startswith="黄").count()).values("name","ac")
+
+
+7.	查询所有课程成绩小于60分的同学的id和姓名；
+    (1).Student.objects.exclude(score__number__gte=60).values("id","name")
+	(-2).Student.objects.filter(score__number__lt=60).distinct().values("id","name")     结果需要去重复,错了,是所有都不及格
+    (2). Student.objects.annotate(ns=Max("score__number")).filter(ns__lt=60)
+8.	查询没有学全所有课的同学的id、姓名；
+	Student.objects.annotate(cs=Count("score__number")).filter(cs__lt=Course.objects.count()).values("id","name")
+9.	查询所有学生的姓名、平均分，并且按照平均分从高到低排序；
+	Student.objects.annotate(an=Avg("score__number")).order_by("-an").values("name","an")
+10.	查询各科成绩的最高和最低分，以如下形式显示：课程ID，课程名称，最高分，最低分；
+	Course.objects.annotate(cn=Min("score__number"),cx=Max("score__number")).values("id","name","cx","cn")
+11.	查询每门课程的平均成绩，按照平均成绩进行排序；
+	Course.objects.annotate(ca=Avg("score__number")).order_by("ca").values("ca")
+
+*12.	统计总共有多少女生，多少男生；
+	Student.objects.filter(gender=1).count()
+    Student.objects.filter(gender=0).count()
+
+    Student.objects.aggregate(mail=Count("gender",filter=Q(gender=0)),famail=Count("gender",filter=Q(gender=1)))
+
+
+13.	将“黄老师”的每一门课程都在原来的基础之上加5分；
+	Score.objects.filter(course__teacher__name__startswith="黄").update(number=F("number")+5)
+
+*14.	查询两门以上不及格的同学的id、姓名、以及不及格课程数；
+	(1). Student.objects.filter(score__number__lt=60).annotate(bc=Count("score__number")).filter(bc__gt=2).values("name","bc")
+    (2). Student.objects.annotate(c=Count("score__number",filter=Q(score__number__lt=60))).filter(c__gt=2).values("id","name","c")
+
+
+    如果要输出的是id\姓名\以及不及格的课程名字呢???
+15.	查询每门课的选课人数；
+    Course.objects.annotate(cc=Count("score__student")).values("name","cc")
+
+
+16. 找出每一门课高于其平均成绩的学生，输出学生的id,name
+    

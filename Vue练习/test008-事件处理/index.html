@@ -1,0 +1,85 @@
+<script src="../vue-2.4.3.js"></script>
+
+<h1>监听事件，大概就是v-on的主场吧</h1>
+<div id="app-1">
+    <h3>可以在用v-on监听事件触发的时候运行一些简单的js代码</h3>
+    <button v-on:click="blood -= 1">杀</button>
+    <p>当前Boss血量为：{{ blood }}</p>
+    <p>当然，这只能处理一些简单的逻辑，更多的就是丢到methods里调用了</p>
+    <template v-if="blood > 0">
+        <p>当前Boss血量为：{{ blood }}</p>
+        <p v-if="random">产生暴击伤害：{{ random }}</p>
+        <button v-on:click="kill">kill</button>
+    </template>
+    <template v-else>
+        <h3>You Win!!!</h3>
+    </template>
+    <p>除了调用方法，还可以在内联js语句中调用（内联就是给方法添加一个传参的功能？），
+    为了将原始的DOM时间区别于普通的值，可以使用特殊变量$event传入</p>
+    <button v-on:click="warn('表单暂不能提交',$event)">Submit</button>
+    （还是不太懂）
+</div>
+
+<script>
+    var app1 = new Vue({
+        el: "#app-1",
+        data: {
+            blood: 1000,
+            random: null
+        },
+        methods: {
+            kill: function(event){
+                var bloods = Math.random().toString().split(".") //将随机数按.分割转化为字典，取前两位拼接
+                console.log("The random num is:" + bloods)
+                this.random = parseFloat(bloods[0] + "." + bloods[1].split("")[0])*10
+                //parseInt和parseFloat为将字符串转化为数字的方法
+                // Math.random() js的随机数函数，随机产生0-1之间的一个数
+                this.blood -= (1 + this.random)
+                // if (event)
+                // {alert("hahaha")}
+                // Event 对象代表事件的状态，比如事件在其中发生的元素、键盘按键的状态、鼠标的位置、鼠标按钮的状态。
+                // 事件通常与函数结合使用，函数不会在事件发生前被执行！
+            },
+            warn: function(message,event){
+                // 现在我们可以访问原生事件对象
+                if (event) event.preventDefault()
+                // preventDefault() 方法阻止元素发生默认的行为（例如，当点击提交按钮时阻止对表单的提交）。
+                alert(message)
+            }
+        }
+    });
+</script>
+
+<div id="app-2">
+    <h3>事件修饰符</h3>
+    <p>为了让方法只有纯粹的数据逻辑，而不用去处理DOM事件（什么意思？？？啥是DOM事件），vue.js为v-on提供了事件修饰符</p>
+    <p>修饰符是由点开头的</p>
+    <ol>
+        <li>.stop阻止单击事件继续传播</li>
+        <li>.prevent提交事件不再重载页面</li>
+        <li>(不懂).capture添加事件监听器时使用事件捕获模式,即元素
+            自身触发的事件先在此处理，然后才交由内部元素进行处理
+        </li>
+        <li>（不懂）.self只当在event.target是当前元素自身时触发处理函数，即事件不是从内部元素触发的</li>
+        <li>2.1.4新增：.once 点击事件将只会触发一次</li>
+        <li>2.3.0新增：.passive </li>
+    </ol>
+    <p>修饰符可以在v-on后单独使用，即只有修饰符，没有触发函数，也可以串联使用，但需要注意顺序</p>
+    <h3>按键修饰符</h3>
+    <p>v-on:keyup.键值或者键的别名可用来监听键盘事件</p>
+    <input v-on:keyup.enter="alertinfo">
+    <!-- <p v-on:keyup.enter="alertinfo">hahahahhah</p> -->
+    <p>其余诸如：自定义按键修饰符别名、自动匹配按键修饰符、
+        系统修饰符以及系统修饰符组合触发的时间和鼠标按钮修饰符暂时不记录，需要时再查</p>
+</div>
+
+<script>
+    var app2 = new Vue({
+        el: "#app-2",
+        methods: {
+            alertinfo: function(){
+                alert("hahhah")
+            }
+        }
+    });
+</script>

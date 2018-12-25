@@ -1,0 +1,24 @@
+<script src="../vue-2.4.3.js"></script>
+
+<div id="test1">
+    <h3>{{message}}</h3>
+    <button v-on:click="message='Make The Change'">改变世界</button>
+</div>
+
+<div id="test2">
+    <h3 v-once>{{message}}</h3>
+    <button v-on:click="message='Make The Change'">改变世界,改变的了吗？？</button>
+</div>
+
+<div id="test3">
+    <p>Mustache写法：{{useHTML}}</p>
+    <p>v-html写法：<span v-html="useHTML"></span></p>
+</div>
+
+<div name="test3" v-bind:id="'hh'+testID">
+    <p>{{testID}}</p>
+    <p>{{getIDis}}</p>
+    <button v-on:click="getID">赋予灵魂</button>
+</div>
+
+<script src="index.js"></script>

@@ -1,0 +1,183 @@
+<script src="../vue-2.4.3.js"></script>
+<h2>计算属性和监听器</h2>
+<hr>
+<h5>在网页里面简单写一下笔记</h5>
+
+<!-- 基础例子 -->
+<div id="app-1">
+
+    <p>简单来讲就是对数据进行逻辑处理时，
+        为了不让模板过重且为了易于维护，就可以利用Vue提供的计算属性来处理
+    </p>
+    <p>普通属性，直接使用双花括号插值。message:{{message}}</p>
+    <p>计算属性，用双花括号引用computed里面的方法，
+        这些方法是依赖于data里面数据存在的（因为是对这些数据执行的一些逻辑操作）。
+        coputed:{{funcmessage}}</p>
+    <p>{{messageExtend}}</p>
+    而不依赖的也可以写在计算属性里面，但是不是响应式依赖
+    <p>{{date}}</p>
+</div>
+<hr>
+<div id="app-2">
+    <h3>计算属性缓存vs方法</h3>
+    <p>调用方法(调用方法要加括号)：{{reverseMessage()}} </p>
+    <p>这么写方法不是及时响应的？？？？？</p>
+    <p>不是啊，是因为我绑定了v-on的原因</p>
+    <p><strong>
+        解释，不是不会响应，最重要的区别在于每当触发重新渲染时候，
+        调用方法将总会再次执行函数，而计算属性方法只有其相关依赖改变时才会重新进行求值
+        也就是一个优化和规范的问题
+    </strong></p>
+    <button v-on:click="change"> 改变世界</button>
+</div>
+<hr>
+<div id="app-3">
+    <h5>计算属性的setter</h5>
+    <p>firstname为：{{firstname}}</p>
+    <input type="text" v-model="firstname">
+    <p>lastname为：{{lastname}}</p>
+    <input type="text" v-model="lastname">
+    <p>fullname：{{fullname}}</p>
+    <p><strong>
+        计算属性默认只有getter，不过在需要时你也可以提供一个setter
+        当再给fullname赋予新的值时，setter会被调用，额外的对数据进行处理
+        固定写法 get和set
+        问题：为什么不直接写在默认的getter里面
+    </strong></p>
+</div>
+
+<!-- 因为 AJAX 库和通用工具的生态已经相当丰富，Vue 核心代码没有重复 -->
+<!-- 提供这些功能以保持精简。这也可以让你自由选择自己更熟悉的工具。 -->
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+
+<div id="app-4">
+    <h5>侦听器</h5>
+    <p>
+        当需要在数据变化时执行异步或开销较大的操作时，
+        可以通过侦听器来解决
+    </p>
+    <p>这里不会，对着文档敲的</p>
+    <p>
+        Ask a yes/no question:
+        <input v-model="question">
+    </p>
+    <p>{{ answer }}</p>
+    -------------------------------------
+    <p>补充：</p>
+    <p>
+        在写方法的时候用到了axios，
+        Axios 是一个基于 promise 的 HTTP 库，
+        可以用在浏览器和 node.js 中。
+    </p>
+    ------------------------------------------
+    <p>
+        主要功能：<br>
+        <ol>
+            <li>从浏览器中创建 XMLHttpRequests</li>
+            <li>从 node.js 创建 http 请求</li>
+            <li>支持 Promise API</li>
+            <li>拦截请求和响应</li>
+            <li>转换请求数据和响应数据</li>
+            <li>取消请求</li>
+            <li>自动转换 JSON 数据</li>
+            <li>客户端支持防御 XSRF</li>
+        </ol>
+    </p>
+    <p>
+        <a href="https://www.kancloud.cn/yunye/axios/234845">中文文档</a>
+    </p>
+</div>
+
+<script>
+    var app1 = new Vue({
+        el: "#app-1",
+        data: {
+            message: "普通属性",
+            extend: "可还行"
+        },
+        computed:{
+            // 计算属性的 getter
+            funcmessage:function(){
+                // this指向vm实例
+                return this.message.split("").reverse().join("")
+            },
+            messageExtend:function(){
+                return this.message + this.extend
+            },
+            date:function(){
+                return Date.now()
+            }
+        }
+    });
+    var app2 = new Vue({
+        el: "#app-2",
+        data: {
+            message:"方法测试"
+        },
+        methods: {
+            reverseMessage:function(){
+                return this.message.split("").reverse().join("")
+            },
+            change:function(){
+                this.message="12345678"
+            }
+        }
+    });
+    var app3 = new Vue({
+        el: "#app-3",
+        data: {
+            firstname:"liu",
+            lastname:"ya"
+        },
+        computed: {
+            fullname:{
+                get:function(){return this.firstname + this.lastname},
+                set:function(){
+                    this.firstname="liuyayayya"
+                    this.lastname="dasdasd"
+                    }
+                }
+
+        }
+    });
+    var app4 = new Vue({
+        el: "#app-4",
+        data: {
+            question: "",
+            answer: "I cannot give you an answer until you ask a question!"
+        },
+        watch:{
+            // 如果"question"发生改变，这个函数就会运行
+            question:function(newQuestion,oldQuestion){
+                this.answer = "等待你输入完成"
+                this.debouncedGetAnswer()
+            }
+        },
+        created: function(){
+            // created选项是用来做什么的？？？？？
+            // "_.debounce"是一个通过Lodash限制操作频率的函数。
+            // 在这个例子中，我们希望限制访问yesno.wtf/api的频率
+            // AJAX请求直到用户输入完毕才会发出
+            this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+        },
+        methods: {
+            getAnswer: function(){
+                if(this.question.indexOf("?")===-1){
+                    // 索引的最后一个是不是问号？？？正常的逻辑不是什么什么===？吗
+                    this.answer = "问题通常应该以问号结尾吧。;-"
+                    return  //这里加return是什么意思,表示函数结束？？？
+                }
+                this.answer = "Thinking..."
+                var vm = this
+                axios.get('https://yesno.wtf/api')
+                  .then(function(response){
+                    vm.answer = _.capitalize(response.data.answer)
+                  })
+                  .catch(function(error){
+                      vm.answer = "Error!获取API出错" + error
+                  })
+            }
+        }
+    });
+</script>

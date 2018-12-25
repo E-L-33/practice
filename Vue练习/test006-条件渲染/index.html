@@ -1,0 +1,123 @@
+<script src="../vue-2.4.3.js"></script>
+<div id="app-1">
+    <h3>条件渲染</h3>
+    <p>v-if，v-else-if，v-else，其中v-else-if为2.1.0新增的</p>
+    v-if=<input v-model="first">
+    v-else-if=<input v-model="second">
+    <div v-if="first">第一个</div>
+    <div v-else-if="second">第二个</div>
+    <div v-else>第三个</div>
+    <p>
+        在templete元素上使用v-if条件渲染分组，可以把template元素
+        做为一个不可见的包裹元素。最终的渲染结果将不包含template元素
+    </p>
+    <template v-if="first">
+        <h1>Title1</h1>
+        <p>Content1</p>
+    </template>
+    <template v-if="second">
+        <h1>Title2</h1>
+        <p>Content2</p>
+    </template>
+    <div v-if="first">
+        <h1>Title1</h1>
+        <p>Content1</p>
+    </div>
+    <div v-if="second">
+        <h1>Title2</h1>
+        <p>Content2</p>
+    </div>
+    <p>和div最大的区别在于，div经过v-if条件渲染以后依然存在，等于会加一个外框</p>
+</div>
+
+<script>
+    var app1 = new Vue({
+        el: "#app-1",
+        data: {
+            first: true,
+            second: false
+        }
+    })
+</script>
+
+<div id="app-3">
+    <h2>用key管理可复用的元素</h2>
+    <p>
+        什么意思呢？（key是用来解决什么问题的）：
+        vue为了更高效的渲染元素，通常会复用已有的元素而不是从头开始渲染，
+        这样会带来一些好处，比如在切换登录方式时，可以保留一部分已经输入的信息（比如密码）
+    </p>
+    <template v-if="statu">
+        <span>Username</span><input placeholder="请输入帐号"><br><br>
+        <span>password</span><input placeholder="请输入密码">
+    </template>
+    <template v-else>
+        <span>Email</span><input placeholder="请输入邮箱号"><br><br>
+        <span>password</span><input placeholder="请输入密码">
+    </template>
+    <br>
+    <button v-on:click="changeStyle">
+        点击切换登录方式
+    </button>
+    <p>
+        但这样也会有问题，很显然你的username和email是不同的东西，
+        使用当你希望”这两个元素是完全独立的，不要复用他们的时候”，
+        那么key就可以可以上场了
+    </p>
+    <template v-if="statu">
+        <span>Username</span><input placeholder="请输入帐号" key="UsernameInput"><br><br>
+        <span>password</span><input placeholder="请输入密码">
+    </template>
+    <template v-else>
+        <span>Email</span><input placeholder="请输入邮箱号" key="EmailInput"><br><br>
+        <span>password</span><input placeholder="请输入密码">
+    </template>
+    <br>
+    <button v-on:click="changeStyle">
+        点击切换登录方式
+    </button>
+</div>
+
+<script>
+    var app3 = new Vue({
+        el: "#app-3",
+        data: {
+            statu: true
+        },
+        methods:{
+            changeStyle:function(){
+                this.statu = !this.statu
+            }
+        }
+    });
+</script>
+
+
+<div id="app-2">
+    <h3>v-if和v-show</h3>
+    <p>v-show的用法和v-if的用法一样，但v-show不支持template元素，也不支持v-else</p>
+    <p>v-if是真正的条件渲染也是惰性的，它会确保在切换过程中条件块的监听器和子组件适当的被销毁和重建。
+        但是如果初始渲染条件为假，则直到条件第一次变为真之前，都不会渲染条件块</p>
+    <p>v-show不管初始条件是什么，都会渲染，而且只是简单的基于css进行切换</p>
+    <p>
+        总的来讲，v-if有更高的切换开销，而v-show有更高的初始渲染开销（不是渲染开销？？？）
+        因此，如果需要频繁切换，就使用v-show，如果在运行时条件很少改变，就使用v-if
+    </p>
+    <h1 v-show="ok">Test</h1>
+    v-show:<input v-model="ok">
+    <h3>other：不推荐同时使用v-if和v-for，v-for具有更高优先级
+        。具体原因与设计风格有关，后再了解，
+    </h3>
+</div>
+<script>
+    var app2 = new Vue({
+        el: "#app-2",
+        data: {
+            ok:false
+        }
+    });
+</script>
+
+<div id="app-3">
+
+</div>

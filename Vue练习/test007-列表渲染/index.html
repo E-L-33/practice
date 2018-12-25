@@ -1,0 +1,114 @@
+<script src="../vue-2.4.3.js"></script>
+<ul id="app-1">
+    <li v-for="(value,key,index) in items">
+        {{ index }}:{{ key }}----{{ value }}
+    </li>
+    <p>v-for的对象可以为数组或者Object对象（也可以为整数）</p>
+    也可以用of来代替in做为分隔符，它是最接近JavaScript迭代器的语法
+    <p>参数依次为值，键，索引，打乱以后在插值时也会打乱，模式未知</p>
+    <p>当然也可以直接用item和index，其中item为items中每项的别名</p>
+    <li v-for="(item,index) in items">
+        {{ index }}:{{ item.message }}
+    </li>
+    <p>为整数的时候</p>
+    <ol>
+        <li v-for="n in 10">{{ items[0].message }}</li>
+        <li v-for="n in 10">{{ n }}</li>
+    </ol>
+</ul>
+
+<script>
+    var app1 = new Vue({
+        el: "#app-1",
+        data: {
+            items: [
+            {message:"AAA"},
+            {message:"BBB"},
+            {message:"CCC"},
+            {message:"DDD"},
+            {message:"EEE"},
+            {message:"FFF"},
+            {message:"GGG"}
+            ]
+        }
+    });
+</script>
+
+<div id="app-2">
+    <h3>接下来是看到就头疼的部分</h3>
+    <p>
+        首先是介绍一下key的作用，在前面已经提到了，key可以用来标识一个元素的“独立性”<br>
+        这里提到vue.js用v-for正在更新已经渲染过的元素列表时，默认使用“就地复用”的策略，
+        什么意思呢，就是如果说数据项的顺序被改变，Vue将不会移动DOM元素来匹配数据项的顺序
+        也就是我上面是说的，模式未知，暂时不了解实际原理，只做了解
+    </p>
+    <h4>数组更新检测</h4>
+    <p>观察数组的变异方法，他们将触发视图的更新，同时也会改变原有的数组</p>
+    <ol>
+        这里写的方法都是js里面的   需要学习
+        <li>push()为数组添加一个元素并且返回索引</li>
+        <li>pop()弹出数组最后一位并返回其值</li>
+        <li>shift()弹出数组首位并返回其值</li>
+        <li>unshift()向首位插入元素并返回数组长度，可一次添加多个值</li>
+        <li>splice()类似于切片，只提供一个参数，返回索引自参数以后的所有值，返回类型为Object</li>
+        <li>sort()不知道啥用，没试出来</li>
+        <li>reverser()将数组颠倒，并返回，返回类型为object</li>
+    </ol>
+    <p>同时，也有非变异方法,不改变原数组，但总是返回一个新数组</p>
+    <ol>
+        <li>filter()</li>
+        <li>concat()</li>
+        <li>slice()</li>
+    </ol>
+    <p>由于js的限制vue不能检测以下变动的数组，也就是说这些变动不是响应式的</p>
+    <ol>
+        <li>利用索引设置一个值</li>
+        <p>解决办法：set和splice或者$set</p>
+        <p>1、Vue.set(vm.items, idexOfItem, newValue)</p>
+        <p>2、Vue.items.splice(idexOfItem, 1, newValue)</p>
+        <p>3、Vue.$set(vm.items, idexOfItem, newValue)该方法是全局方法Vue.set的一个别名</p>
+        <li>修改数组长度</li>
+        <p>解决办法：splice</p>
+        <p>vm.items.splice(newLength)</p>
+        <li>对象属性的添加和修改</li>
+        <p>var vm = new Vue({<br>
+            data: {<br>
+                a:1  //这里是响应的<br>
+            } <br>
+        }) <br>
+        vm.b=2 //这里就不能响应<br>
+        解决办法依然是set和$set：
+        vm.set/$set(Object, key, value)
+        </p>
+    </ol>
+    <h5 v-style="color:'red'">先这样，不了解的很多，时间关系，后面再深入了解</h5>
+</div>
+
+<div id="app-3">
+    <h3>显示过滤和排序结果</h3>
+    略过，类似于map()
+</div>
+
+
+<div id="app-4">
+    <h3>其他部分</h3>
+    <h3>带有v-for的template元素,类似于v-if,渲染以后template不会被渲染出来</h3>
+    <ul>
+        <template v-for="item in items">
+            <li>{{ item.msg }}</li>
+            <li></li>
+        </template>
+    </ul>
+</div>
+<script>
+    var app4 = new Vue({
+        el: "#app-4",
+        data: {
+            items: [
+            {msg:'AAA'},
+            {msg:'BBB'}
+            ]
+        }
+    });
+</script>
+<h2>最后一部分是v-for在组件上的应用（祖传的toDoList），看完组件再回来使用</h2>

@@ -1,0 +1,76 @@
+<script src="../vue-2.4.3.js"></script>
+
+<div id="app-1">
+    <h2>class和style绑定</h2>
+    <h3>重要的是先过一遍咯</h3>
+    <p>说明：<br>在vue.js中，在将v-bind用于class和style时，
+        表达式的类型除了字符串之外，还可以是对象或数组</p>
+    <h3>绑定HTML Class v-bind:class</h3>
+    <p>可以在对象中传入更多属性来动态切换多个class，同时，
+        v-bind:class也可以与普通的clsss属性共存
+    </p>
+    <div class="static"
+            v-bind:class="{active:isActive, 'text-dange':isError}"
+            id="app--1"></div>
+            <!-- 这里active不需要引号，而其他属性需要引号，为什么？？？ -->
+    <p>{{ classIs }}</p>
+    <button v-on:click="getClass">获取当前属性</button>
+    <p>当然也可以绑定一个返回对象的计算属性</p>
+    <hr>
+    <h4>Array</h4>
+    <div v-bind:class="[arr1,arr2]">可以传一个数组给v-bind:class</div>
+    <div v-bind:class="[trueOrFalse ? arr1 : '',arr2]">
+        也可以使用三元表达式来切换列表中的class</div>
+    <h5>组件部分暂时看不懂，略过</h5>
+</div>
+
+<script>
+    var app1 = new Vue({
+        el: "#app-1",
+        data: {
+            isActive:true,
+            isError:false,
+            classIs:null,
+            arr1: "class1",
+            arr2: "class2",
+            trueOrFalse: false
+        },
+        methods: {
+            getClass:function(){
+                this.classIs = document.getElementById("app--1").getAttribute("class")
+            }
+        }
+    })
+</script>
+
+<div id="app-2">
+    <h3>绑定内联样式v-bind:style</h3>
+    <p>v-bind:style绑定的是一个javascript对象，
+        可以单独绑定data的元素也可以直接绑定一个样式对象。直接绑定一个样式对象会让模板更加清晰</p>
+    <div v-bind:style="{color:acticveColor,fontSize :fontsize + 'px'}">绑定data元素</div>
+    <div v-bind:style="styleObject">绑定样式对象</div>
+    <div v-bind:style="[style1,styleObject]">v-bind:style的数组语法可以将多个样式对象绑定到一个元素上</div>
+    <h3>多重值和自动前缀（没接触，不理解）</h3>
+    <p>1、当v-bind:style使用需要添加浏览器
+        引擎前缀的css属性，vue.js会自动侦测并添加相应的前缀。</p>
+    <p>从2.3.0起可以为style绑定中的属性提供一个包含多个值的数组，
+        常用于提供多个带前缀的值，这样写会渲染数组中最后一个被浏览器支持的值</p>
+</div>
+
+<script>
+    var app2 = new Vue({
+        el: "#app-2",
+        data: {
+            acticveColor: "red",
+            fontsize: 30,
+            styleObject: {
+                color:"red",
+                fontsize: "10px"
+            },
+            style1: {
+                left:"50px"
+                // 怎么写需要-的样式，比如margin-top，以及缩写的空格加引号后是否有效
+            }
+        }
+    });
+</script>

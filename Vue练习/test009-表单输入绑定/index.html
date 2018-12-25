@@ -1,0 +1,102 @@
+<script src="../vue-2.4.3.js"></script>
+
+<div id="app-1">
+    <h2>表单绑定输入</h2>
+    <p>
+        可以用v-model指令在&lt;input&gt;、&lt;textarea&gt;和&lt;select&gt; （下拉框）
+        元素上创建双向数据绑定
+    </p>
+    <p>绑定布尔值到复选框和多个复选框绑定到一个数组，可以玩一下</p>
+    <h3>这个label标签需要熟悉一下，玩的少啊</h3>
+    <input type="checkbox" id="checkbox" v-model="checked">
+    <label for="checkbox">{{ checked }}</label>
+    <p>对应的checked的值是会变的：{{ checked }}</p>
+    <h4>多个复选框，绑定到同一数组</h4>
+    <input type="checkbox" id="jack" value="选中传递的是value值" v-model="items">
+    <label for="jack">点击就送</label>
+    <input type="checkbox" id="bob" value="label只是用来显示" v-model="items">
+    <label for="bob">label只是用来显示</label>
+    <input type="checkbox" id="liuya" value="liuya" v-model="items">
+    <label for="liuya">传递的值与选择顺序也有关</label>
+    <br>
+    <p>选中的是：{{ items }}</p>
+    <h4>单选按钮</h4>
+    <input type="radio" id="one" value="one" v-model="checked" name="one"><label for="one">one</label>
+    <input type="radio" id="two" value="two" v-model="checked" name="two"><label for="two">two</label>
+    <h4>单选的下拉框</h4>
+    <select v-model="selected">
+        <option disabled value="">请选择</option>
+        <!--  解决IOS 不会触发 change 事件 -->
+        <option>A</option>
+        <option>B</option>
+        <option>C</option>
+    </select>
+    <span>Selected:{{ selected }}</span>
+    <h4>还有多选时(加一个multiple属性就可以多选)绑定到一个数组，这里再玩一下用v-for来动态渲染</h4>
+    <select v-model="forSelect">
+        <option disabled value="">请选择</option>
+        <option v-for="item in selects">{{ item.text }}</option>
+    </select>
+    <span>你选择的是：{{forSelect}}</span>
+</div>
+<script>
+    var app1 = new Vue({
+        el: "#app-1",
+        data: {
+            checked: false,
+            items: [],
+            selected: "",
+            forSelect: "",
+            selects:[
+            {id:1,text:'app'},
+            {id:2,text:'egg'},
+            {id:3,text:'pdd'}
+            ]
+        }
+    });
+</script>
+
+<div id="app-2">
+    <h2>值绑定</h2>
+    <p>
+        对于单选按钮、复选框及选择框，v-model通常绑定的是静态字符（复选框也可以是布尔值），
+        当需要把值绑定到Vue实例的一个动态属性上时，可以使用v-bind，
+        并且这个属性的值可以不是字符串
+    </p>
+    <h4>复选框</h4>
+    <input type="checkbox" v-model="toggle" true-value="yes" false-value="no">
+    <span>toggle:{{ toggle }}</span>
+    <h4>单选按钮</h4>
+    <input type="radio" v-model="pick" v-bind:value="a">
+    <input type="radio" v-model="pick" v-bind:value="b">
+    <span> pick:{{pick}} </span>
+    <h4>选择框（也就是我叫的下拉框，但是官网给的是选择框，那就叫选择框咯）</h4>
+    <select v-model="selected">
+        <option v-bind:value="{number:123}">123</option>
+    </select>
+    <span>selected:{{selected}}</span>
+</div>
+
+<script>
+    var app2 = new Vue({
+        el: "#app-2",
+        data: {
+            toggle: "",
+            a: "这是一个要传过去的值1",
+            b: "这是一个要传过去的值2",
+            pick: "",
+            selected: "",
+        }
+    });
+</script>
+<div id="app-3">
+    <h2>v-model的修饰符</h2>
+    <ol>
+        <li>.lazy 在默认情况下，v-model在每次input事件触发后将输入
+            框的值与数据进行同步，添加lazy修饰符后就变为使用change事件进行同步
+            &lt;不懂啊&gt;
+        </li>
+        <li>.number 自动将用户的输入值转为数值类型</li>
+        <li>.trim 自动过滤用户输入的首尾空白字符</li>
+    </ol>
+</div>

@@ -1,0 +1,65 @@
+<script src="../vue-2.4.3.js"></script>
+<div id="app-1">
+    keep {{ message1 }},keep {{ message2 }}!
+</div>
+<div id="app-2">
+    <h5>挑简单的来，双向绑定</h5>
+    <p>{{message}}</p>
+    <input type="text" v-model="message" id="app-2">
+</div>
+<div id="app-3">
+    <h5>绑定元素</h5>
+    <span v-bind:title="message">绑定提示信息：</span>
+</div>
+<div id="app-4">
+    <h5>if条件判断和for循环</h5>
+    <p>if判断真假：<span>keep condfident,keep determination</span></p>
+    <p>if为真：<span v-if="condition1">keep condfident,keep determination</span></p>
+    <p>if为假：<span v-if="condition2">keep condfident,keep determination</span></p>
+    <h5>for循环</h5>
+    <p v-for="item in items">{{item.id}}{{item.text}}</p>
+</div>
+<div id="app-5">
+    <h5>template</h5>
+    <h6>首先是注册组件，然后关联，然后用，这样的组件是死的</h6>
+</div>
+
+
+
+
+
+<script>
+    var app1 = new Vue({
+        el: "#app-1",
+        data :{
+            message1:"confident",
+            message2:"determination"
+        }
+    });
+    var app2= new Vue({
+        el: "#app-2",
+        data: {
+            message:'初始内容'
+        }
+    });
+    var app3=new Vue({
+        el: "#app-3",
+        data:{
+            message:"页面加载于："+ new Date().toLocaleString()
+        }
+    });
+    var app4=new Vue({
+        el: "#app-4",
+        data: {
+            condition1:true,
+            condition2:false,
+            items:[
+                {id:1,text:"这是开始"},
+                {id:2,text:"这是中间"},
+                {id:3,text:"这是结尾"}
+            ]
+        }
+    });
+    vue.
+
+</script>

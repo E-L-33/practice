@@ -1,0 +1,59 @@
+<script src="../vue-2.4.3.js"></script>
+<!-- 声明式渲染 -->
+<div id="app-1">
+    <h3>1、</h3>
+    {{ message }}
+</div>
+<div id="app-2">
+    <h3>2、</h3>
+    <span v-bind:title="message">这里的message，不用双花括号引用，可能是v-bind的原因？？？鼠标放上来给你看奇迹</span>
+</div>
+<!-- 条件与循环 -->
+<div id="app-3">
+    <h3>3、</h3>
+    <ol>
+        <li v-if="seen1">看到的到我？？？？</li>
+        <li v-if="seen2">看到的到我</li>
+    </ol>
+</div>
+<div id="app-4">
+    <h3>4、</h3>
+    <ol>
+        <li v-for="item in items">{{ item.message }}</li>
+    </ol>
+</div>
+<!-- 处理用户输入 -->
+    <!-- v-on监听事件 -->
+<div id="app-5">
+    <h3>5、</h3>
+    <h4>{{message}}</h4>
+    <button v-on:click="some_thing_for_nothing">做点什么呢？</button>
+</div>
+    <!-- v-model双向绑定表单输入和应用状态 -->
+<div id="app-6">
+    <h3>6、</h3>
+    <h4>{{message}}</h4>
+    <input type="text" v-model='message'>
+</div>
+<!-- 组件化应用构建 -->
+    <!-- 死版 -->
+<div id="app-7">
+    <h3>7、</h3>
+    <ol>
+        <todo></todo>
+        <todo></todo>
+        <todo></todo>
+        <todo></todo>
+    </ol>
+</div>
+    <!-- 用接口的方式来传递数据 -->
+
+<div id="app-8">
+    <h3>8、</h3>
+    <ol>
+        <todoitem v-for="item in lists" v-bind:todo="item" v-bind:key="item.id"></todoitem>
+        <!-- 这里要注意todo和key -->
+    </ol>
+</div>
+
+<script src='main.js'></script>
